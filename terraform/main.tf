@@ -45,18 +45,12 @@ resource "aws_security_group" "allow_ssh" {
   }
 }
 
-# Criando uma chave SSH
-resource "aws_key_pair" "deployer" {
-  key_name   = "my-key"
-  public_key = file("./ec2.pub")
-}
 
 # Criando a instância EC2
 resource "aws_instance" "web" {
   ami           = "ami-0427090fd1714168b"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.main.id
-  key_name       = aws_key_pair.deployer.key_name
   security_groups = [aws_security_group.allow_ssh.name]
 
   tags = {
