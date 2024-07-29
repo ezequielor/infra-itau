@@ -22,6 +22,35 @@ resource "aws_subnet" "main" {
   }
 }
 
+# Criando um Gateway de Internet
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "main-igw"
+  }
+}
+
+# Criando uma tabela de roteamento
+resource "aws_route_table" "main" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = {
+    Name = "main-route-table"
+  }
+}
+
+# Associando a tabela de roteamento à sub-rede
+resource "aws_route_table_association" "main" {
+  subnet_id      = aws_subnet.main.id
+  route_table_id = aws_route_table.main.id
+}
+
+
 # Criando um grupo de segurança
 resource "aws_security_group" "allow_ssh" {
   vpc_id = aws_vpc.main.id
