@@ -51,7 +51,7 @@ resource "aws_instance" "web" {
   ami           = "ami-0427090fd1714168b"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.main.id
-  security_groups = [aws_security_group.allow_ssh.name]
+  security_groups = [aws_security_group.allow_ssh.id]
 
   tags = {
     Name = "my-instance"
